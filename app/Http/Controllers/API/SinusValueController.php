@@ -12,9 +12,16 @@ class SinusValueController extends Controller
 	{
 		$request->validate([
 			'sinus_id' => 'required|integer',
-			'date' => 'required|date',
+			'date' => 'required|date|before_or_equal:today',
 			'value' => 'required|integer',
 		]);
+
+		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()-get();
+		if ($latestSinusValue) {
+			if (strtotime($request->get('date')) < strtotime($latestSinusValue)) {
+				return response()->json('error');
+			}
+		}
 
 		$newSinusValue = new SinusValue([
 			'sinus_id' => $request->get('sinus_id'),
