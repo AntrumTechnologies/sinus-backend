@@ -19,6 +19,7 @@ class CreateSinusvaluesTable extends Migration
             $table->date('date');
             $table->integer('value');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

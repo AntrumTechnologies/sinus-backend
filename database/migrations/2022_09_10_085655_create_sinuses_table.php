@@ -18,6 +18,7 @@ class CreateSinusesTable extends Migration
             $table->string('name');
             $table->string('date_name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
