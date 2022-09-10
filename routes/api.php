@@ -28,4 +28,4 @@ Route::put('sinus/delete', [SinusController::class, 'delete']);
 
 Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store']);
-Route::put('sinusvalue/delete', [SinusController::class, 'delete']);
+Route::put('sinusvalue/delete', [SinusValueController::class, 'delete']);
