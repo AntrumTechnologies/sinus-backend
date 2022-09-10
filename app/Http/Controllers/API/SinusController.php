@@ -45,14 +45,15 @@ class SinusController extends Controller
 		]);
 
 		$sinus = Sinus::where('id', $request->get('id'));
-		if (!$sinus->delete()) {
+		$sinusDeletion = $sinus->delete();
+		if (!$sinusDeletion) {
 			return response()->json($sinus);
 		}
 		
 		$sinusValues = SinusValue::where('sinus_id', $request->get('id'));
-		if (!$sinusValues->delete() && $sinus->trashed()) {
+		if (!$sinusValues->delete() && $sinusDeletion) {
 			// Rollback Sinus deletion if sinusValue deletion failed
-			$sinus->restore();
+			Sinus::onlyTrashed()->where('id', $request->get('id'))->restore();
 		}
 
 		return response()->json($sinusValues);
