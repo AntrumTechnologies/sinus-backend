@@ -47,7 +47,7 @@ class SinusValueController extends Controller
 			'date' => 'required|date',
 		]);
 
-		$sinusValues = SinusValue::where('sinus_id', $request->get('sinus_id'))->where('date', $request->get('date'))->delete();
-		return response()->json($sinusValues);
+		$sinusValues = SinusValue::where('sinus_id', $request->get('sinus_id'))->where('date', $request->get('date'));
+		return response()->json($sinusValues->delete());
 	}	
 }

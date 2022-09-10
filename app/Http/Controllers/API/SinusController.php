@@ -44,13 +44,13 @@ class SinusController extends Controller
 			'id' => 'required|integer',
 		]);
 
-		$sinus = Sinus::where('id', $id)->delete();
-		if (!$sinus) {
+		$sinus = Sinus::where('id', $request->get('id'));
+		if (!$sinus->delete()) {
 			return response()->json($sinus);
 		}
 		
-		$sinusValues = SinusValue::where('sinus_id', $id)->delete();
-		if (!$sinusValues && $sinus->trashed()) {
+		$sinusValues = SinusValue::where('sinus_id', $request->get('id'));
+		if (!$sinusValues->delete() && $sinus->trashed()) {
 			// Rollback Sinus deletion if sinusValue deletion failed
 			$sinus->restore();
 		}
