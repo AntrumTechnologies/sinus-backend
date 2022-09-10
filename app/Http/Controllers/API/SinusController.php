@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sinus;
+use App\Models\SinusValue;
 use Illuminate\Http\Request;
 
 class SinusController extends Controller
@@ -35,5 +36,25 @@ class SinusController extends Controller
 	{
         $sinus = Sinus::findOrFail($id);
 		return response()->json($sinus);
+	}
+
+	public function delete(Request $request)
+	{
+		$request->validate([
+			'id' => 'required|integer',
+		]);
+
+		$sinus = Sinus::where('id', $id)->delete();
+		if (!$sinus) {
+			return response()->json($sinus);
+		}
+		
+		$sinusValues = SinusValue::where('sinus_id', $id)->delete();
+		if (!$sinusValues && $sinus->trashed()) {
+			// Rollback Sinus deletion if sinusValue deletion failed
+			$sinus->restore();
+		}
+
+		return response()->json($sinusValues);
 	}
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SinusValue extends Model
 {
-	use HasFactory;
+	use HasFactory, SoftDeletes;
 
     protected $table = 'sinusvalues';
 
