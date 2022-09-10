@@ -18,7 +18,7 @@ class SinusValueController extends Controller
 
 		$newSinusValue = new SinusValue([
 			'sinus_id' => $request->get('sinus_id'),
-			'date' => $rquest->get('date'),
+			'date' => $request->get('date'),
 			'value' => $request->get('value'),
 		]);
 
@@ -29,7 +29,8 @@ class SinusValueController extends Controller
 
 	public function show($id)
 	{
-		$sinusValues = SinusValue::where('sinus_id', '=', $request->get('id'))->get('sinus_id');
+        $sinusValues = SinusValue::where('sinus_id', $id)->get();
+        $sinusValues = $sinusValues->makeHidden(['id', 'sinus_id', 'created_at', 'updated_at']);
 		return response()->json($sinusValues);
 	}
 }

@@ -10,12 +10,12 @@ class SinusController extends Controller
 {
 	public function index()
 	{
-		$sinuses = Sinus::all();
+        $sinuses = Sinus::all();
 		return response()->json($sinuses);
 	}
 
 	public function store(Request $request)
-	{
+    {
 		$request->validate([
 			'name' => 'required|max:30',
 			'date_name' => 'required|max:30',
@@ -23,15 +23,17 @@ class SinusController extends Controller
 
 		$newSinus = new Sinus([
 			'name' => $request->get('name'),
-			'date_name' => $request->get('date'),
-		]);
+			'date_name' => $request->get('date_name'),
+        ]);
+
+        $newSinus->save();
 
 		return response()->json($newSinus);
 	}
 
 	public function show($id)
 	{
-		$sinus = Sinus::findOrFail($id);
+        $sinus = Sinus::findOrFail($id);
 		return response()->json($sinus);
 	}
 }
