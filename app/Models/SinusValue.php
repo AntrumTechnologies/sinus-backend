@@ -9,6 +9,8 @@ class SinusValue extends Model
 {
 	use HasFactory;
 
+    protected $table = 'sinusvalues';
+
 	protected $fillable = [
 		'sinus_id',
 		'date',
