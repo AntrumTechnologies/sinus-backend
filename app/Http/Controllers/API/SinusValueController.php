@@ -16,10 +16,10 @@ class SinusValueController extends Controller
 			'value' => 'required|integer',
 		]);
 
-		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()-get();
+		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()->first();
 		if ($latestSinusValue) {
-			if (strtotime($request->get('date')) < strtotime($latestSinusValue)) {
-				return response()->json('error');
+			if (strtotime($request->get('date')) <= strtotime($latestSinusValue->date)) {
+				return response()->json('Given date before or equal to latest date');
 			}
 		}
 
