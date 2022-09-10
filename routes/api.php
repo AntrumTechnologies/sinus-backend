@@ -24,8 +24,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('sinus', [SinusController::class, 'index']);
 Route::get('sinus/{id}', [SinusController::class, 'show']);
 Route::put('sinus', [SinusController::class, 'store']);
-Route::put('sinus/{id}', [SinusController::class, 'delete']);
+Route::put('sinus/delete', [SinusController::class, 'delete']);
 
 Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store']);
-Route::put('sinusvalue/{id}', [SinusController::class, 'delete']);
+Route::put('sinusvalue/delete', [SinusController::class, 'delete']);
