@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    use VerifiesEmail;
+    //use VerifiesEmail; // TODO(PATBRO)
 
     public $successStatus = 200;
     public $errorStatus = 400;
@@ -26,7 +29,7 @@ class UserController extends Controller
             return response()->json(["success" => $success], $this->successStatus);
         }
 
-        return response()->json(["error" => "Login failed. Please check your credentials"], $this->error);
+        return response()->json(["error" => "Login failed. Please check your credentials"], $this->errorStatus);
     }
 
     public function logout(Request $request)
@@ -50,7 +53,9 @@ class UserController extends Controller
             return response()->json(["error" => $validator->errors()], $this->errorStatus);
         }
 
-        $user = User::create($request->validated());
+        $validated = $validator->validated();
+        $validated['password'] = Hash::make($validated['password']);
+        $user = User::create($validated);
 
         Auth::login($user, $remember = true);
         return response()->json(["success" => "Registration successful!"], $this->successStatus);
