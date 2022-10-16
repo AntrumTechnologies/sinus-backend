@@ -25,15 +25,26 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $success['token'] = $request->session()->regenerate();
-            return response()->json(["success" => $success], $this->successStatus);
+            $request->session()->regenerate();
+            $token = User::where('email', $request->email)->first()->createToken()->plainTextToken;
+            return response()->json(["success" => $token], $this->successStatus);
         }
 
-        return response()->json(["error" => "Login failed. Please check your credentials"], $this->errorStatus);
+        return response()->json(["error" => "The provided credentials are incorrect"], $this->errorStatus);
     }
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $user->tokens()->delete(); // Deletes all tokens
+
+        /*
+        TODO(PATBRO): room for improvement, to only delete the current session token
+        $token = PersonalAccessToken::findtoken($request->bearerToken());
+        $token->delete();
+        */
+
+        // TODO(PATBRO): are the three lines of code below necessary?
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -57,8 +68,8 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
 
-        Auth::login($user, $remember = true);
-        return response()->json(["success" => "Registration successful!"], $this->successStatus);
+        $token = User::where('email', $request->email)->first()->createToken()->plainTextToken;
+        return response()->json(["success" => $token], $this->successStatus);
     }
 
     public function getDetails()
