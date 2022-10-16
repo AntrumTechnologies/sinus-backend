@@ -18,14 +18,14 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('sinus', [SinusController::class, 'index']);
-Route::get('sinus/{id}', [SinusController::class, 'show']);
-Route::put('sinus', [SinusController::class, 'store']);
-Route::put('sinus/delete', [SinusController::class, 'delete']);
+Route::get('sinus', [SinusController::class, 'index'])->middleware('auth');
+Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth');
+Route::put('sinus', [SinusController::class, 'store'])->middleware('auth');
+Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth');
 
-Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
-Route::put('sinusvalue', [SinusValueController::class, 'store']);
-Route::put('sinusvalue/delete', [SinusValueController::class, 'delete']);
+Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('auth');
+Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth');
+Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth');
 
 Route::post('register', [UserController::class, 'register'])->middleware('guest');
 Route::post('login', [UserController::class, 'login'])->middleware('guest')->name('login');
