@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\SinusController;
 use App\Http\Controllers\API\SinusValueController;
+use App\Http\Controllers\API\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +18,6 @@ use App\Http\Controllers\API\SinusValueController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('sinus', [SinusController::class, 'index']);
 Route::get('sinus/{id}', [SinusController::class, 'show']);
 Route::put('sinus', [SinusController::class, 'store']);
@@ -29,3 +26,7 @@ Route::put('sinus/delete', [SinusController::class, 'delete']);
 Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store']);
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete']);
+
+Route::post('register', [UserController::class, 'register'])->middleware('guest');
+Route::post('login', [UserController::class, 'login'])->middleware('guest')->name('login');
+Route::post('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
