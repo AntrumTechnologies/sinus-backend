@@ -31,6 +31,7 @@ Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->mi
 Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth');
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth');
 
+Route::put('following', [FollowingController::class, 'index'])->middleware('auth');
 Route::put('follow', [FollowingController::class, 'store'])->middleware('auth');
 Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth');
 
