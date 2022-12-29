@@ -13,6 +13,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundExceptio
 
 class FollowingController extends Controller
 {
+    // Retrieve list of all users that the current user is following
+    public function index()
+    {
+        $following = Following::where('user_id', Auth::id());
+		return Response::json($following, 200);
+    }
+
 	public function store(Request $request)
     {
 		$request->validate([
@@ -62,7 +69,7 @@ class FollowingController extends Controller
 
             return Response::json($following, 200);
         } catch (ModelNotFoundException) {
-            return Response::json('');
+            return Response::json('', 200);
         }
 	}
 }

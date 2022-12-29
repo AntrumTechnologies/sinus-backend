@@ -16,6 +16,7 @@ class CreateSinusesTable extends Migration
         Schema::create('sinuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->bigInteger('user_id');
             $table->string('date_name');
             $table->timestamps();
             $table->softDeletes();
