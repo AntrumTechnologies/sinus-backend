@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\FollowingController;
+use App\Http\Controllers\API\LogController;
 use App\Http\Controllers\API\SinusController;
 use App\Http\Controllers\API\SinusValueController;
 use App\Http\Controllers\API\UserController;
@@ -32,6 +33,8 @@ Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middle
 
 Route::put('follow', [FollowingController::class, 'store'])->middleware('auth');
 Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth');
+
+Route::put('log', [LogController::class, 'store'])->middleware('auth');
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login'])->name('login');
