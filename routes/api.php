@@ -20,8 +20,8 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('sinus/index', [SinusController::class, 'index'])->middleware('auth');
-Route::get('sinus/index/{user_id}', [SinusController::class, 'index'])->middleware('auth');
+Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware('auth');
+Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth');
 Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth');
 Route::put('sinus', [SinusController::class, 'store'])->middleware('auth');
 Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth');

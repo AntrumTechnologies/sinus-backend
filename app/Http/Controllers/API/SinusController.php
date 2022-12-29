@@ -8,20 +8,24 @@ use App\Models\SinusValue;
 use App\Models\Following;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class SinusController extends Controller
 {
-	public function index($user_id = null)
+	public function indexExplore()
 	{
-		if ($user_id != null) {
-			$retrieveFollowing = Following::where('user_id', Auth::id());
-			$retrieveSine = Sinus::where('user_id', Auth::id())->union($retrieveFollowing)->get();
-			return Response::json($retrieveSine, 200);
-		} else {
-			$retrieveSine = Sinus::all();
-			return Response::json($retrieveSine, 200);
-		}
+		$retrieveSine = Sinus::all();
+		return Response::json($retrieveSine, 200);
+	}
+
+	public function indexFollowing()
+	{
+		$retrieveFollowing = Following::where('user_id', Auth::id())->pluck('following_user_id')->toArray();
+		array_push($retrieveFollowing, Auth::id()); // User always follows themselves
+		$retrieveSine = DB::table('sinuses')->whereIn('user_id', $retrieveFollowing)->get();
+
+		return Response::json($retrieveSine, 200);
 	}
 
 	public function store(Request $request)
