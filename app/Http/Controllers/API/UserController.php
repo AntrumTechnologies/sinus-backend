@@ -26,7 +26,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $token = User::where('email', $request->email)->first()->createToken()->plainTextToken;
+            $token = User::where('email', $request->email)->first()->createToken('')->plainTextToken;
             return response()->json(["success" => $token], $this->successStatus);
         }
 
@@ -68,7 +68,7 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
 
-        $token = User::where('email', $request->email)->first()->createToken()->plainTextToken;
+        $token = User::where('email', $request->email)->first()->createToken('')->plainTextToken;
         return response()->json(["success" => $token], $this->successStatus);
     }
 
