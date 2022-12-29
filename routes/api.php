@@ -27,6 +27,9 @@ Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store']);
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete']);
 
+Route::put('follow', [FollowingController::class, 'store']);
+Route::put('unfollow', [FollowingController::class, 'delete']);
+
 Route::post('register', [UserController::class, 'register'])->middleware('guest');
 Route::post('login', [UserController::class, 'login'])->middleware('guest')->name('login');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
