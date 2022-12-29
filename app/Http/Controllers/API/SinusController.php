@@ -7,6 +7,7 @@ use App\Models\Sinus;
 use App\Models\SinusValue;
 use App\Models\Following;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class SinusController extends Controller
@@ -32,6 +33,7 @@ class SinusController extends Controller
 
 		$newSinus = new Sinus([
 			'name' => $request->get('name'),
+			'user_id' => Auth::id(),
 			'date_name' => $request->get('date_name'),
         ]);
 
