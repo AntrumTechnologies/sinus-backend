@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\FollowingController;
 use App\Http\Controllers\API\SinusController;
 use App\Http\Controllers\API\SinusValueController;
 use App\Http\Controllers\API\UserController;

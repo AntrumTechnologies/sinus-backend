@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Sinus;
-use App\Models\SinusValue;
+use App\Models\Following;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -40,7 +39,7 @@ class FollowingController extends Controller
             ])->firstOrFail();
 
             Log::notice("Follow call was executed even though combination of user ID (". Auth::id() .") and following user ID (". $request->get('user_id_to_unfollow') .") is already present in table");
-        } catch (ModelNotFoundException) {
+        } catch (ModelNotFoundException $e) {
             // Only save to database when combination is not yet present in database
             $newFollowing->save();
         }
@@ -68,7 +67,7 @@ class FollowingController extends Controller
             }
 
             return Response::json($following, 200);
-        } catch (ModelNotFoundException) {
+        } catch (ModelNotFoundException $e) {
             return Response::json('', 200);
         }
 	}
