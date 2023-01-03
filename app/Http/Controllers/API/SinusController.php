@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Response;
 
 class SinusController extends Controller
 {
+	public function indexCreated()
+	{
+		$createdSinuses = Sinus::where('user_id', Auth::id())->get();
+		return Response::json($createdSinuses, 200);
+	}
+
 	public function indexExplore()
 	{
 		$retrieveSine = Sinus::all();

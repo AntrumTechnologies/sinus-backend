@@ -21,6 +21,7 @@ use App\Http\Controllers\API\UserController;
 */
 
 Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware('auth');
+Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middleware('auth');
 Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth');
 Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth');
 Route::put('sinus', [SinusController::class, 'store'])->middleware('auth');
@@ -31,7 +32,7 @@ Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->mi
 Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth');
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth');
 
-Route::put('following', [FollowingController::class, 'index'])->middleware('auth');
+Route::get('following', [FollowingController::class, 'index'])->middleware('auth');
 Route::put('follow', [FollowingController::class, 'store'])->middleware('auth');
 Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth');
 
