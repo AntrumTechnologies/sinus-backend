@@ -20,24 +20,24 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware('auth');
-Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middleware('auth');
-Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth');
-Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth');
-Route::put('sinus', [SinusController::class, 'store'])->middleware('auth');
-Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth');
+Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware('auth:sanctum');
+Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middleware('auth:sanctum');
+Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth:sanctum');
+Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth:sanctum');
+Route::put('sinus', [SinusController::class, 'store'])->middleware('auth:sanctum');
+Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('auth');
-Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->middleware('auth');
-Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth');
-Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth');
+Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('auth:sanctum');
+Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->middleware('auth:sanctum');
+Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth:sanctum');
+Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::get('following', [FollowingController::class, 'index'])->middleware('auth');
-Route::put('follow', [FollowingController::class, 'store'])->middleware('auth');
-Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth');
+Route::get('following', [FollowingController::class, 'index'])->middleware('auth:sanctum');
+Route::put('follow', [FollowingController::class, 'store'])->middleware('auth:sanctum');
+Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::put('log', [LogController::class, 'store'])->middleware('auth');
+Route::put('log', [LogController::class, 'store'])->middleware('auth:sanctum');
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login'])->name('login');
-Route::post('logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
