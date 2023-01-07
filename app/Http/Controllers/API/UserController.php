@@ -99,11 +99,11 @@ class UserController extends Controller
         $user = Auth::user();
         $original_user = $user;
         if ($request->has('avatar')) {
-            $user->avatar = Storage::putFile('avatars', $request->file('avatar'));
-            // Delete original avatar if upload was successful
-            if ($user->avatar) {
-                Storage::delete($original_user->avatar);
+            if ($user->avatar != null) {
+                Storage::delete($user->avatar);
             }
+
+            $user->avatar = Storage::putFile('avatars', $request->file('avatar'));
         }
 
         if ($request->has('email')) {
