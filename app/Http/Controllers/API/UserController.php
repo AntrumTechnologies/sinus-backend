@@ -81,4 +81,31 @@ class UserController extends Controller
 
         return response()->json(["error" => "Failed to retrieve user details"], $this->successStatus);
     }
+
+    public function updateDetails(Request $reuqest)
+    {
+        $validator = Validator::make($request->all(), [
+            // Only validate when posted
+            'avatar' => 'sometimes|mimes:jpeg,png|max:2048',
+            'email' => 'sometimes|email|unique:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
+
+        $user = Auth::user();
+        $original_user = $user;
+        if ($request->has('avatar')) {
+            $user->avatar = Storage::putFile('avatars', $request->file('avatar'));
+        }
+
+        if ($request->has('email')) {
+            $user->email = $request->input('email');
+        }
+
+        $user->save();
+        Log::info("Details for user ID ". $user->id ." were updated successfully");
+        return response()->json(['success' => $user], 200);
+    }
 }

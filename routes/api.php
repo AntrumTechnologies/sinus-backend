@@ -41,3 +41,5 @@ Route::put('log', [LogController::class, 'store'])->middleware('auth:sanctum');
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
+Route::get('user', [UserController::class, 'getDetails'])->middleware('auth:sanctum');
+Route::post('user/update', [UserController::class, 'updateDetails'])->middleware('auth:sanctum');
