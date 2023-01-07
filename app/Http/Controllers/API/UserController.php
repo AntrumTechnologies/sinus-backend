@@ -82,7 +82,7 @@ class UserController extends Controller
         return response()->json(["error" => "Failed to retrieve user details"], $this->successStatus);
     }
 
-    public function updateDetails(Request $reuqest)
+    public function updateDetails(Request $request)
     {
         $validator = Validator::make($request->all(), [
             // Only validate when posted
@@ -98,6 +98,10 @@ class UserController extends Controller
         $original_user = $user;
         if ($request->has('avatar')) {
             $user->avatar = Storage::putFile('avatars', $request->file('avatar'));
+            // Delete original avatar if upload was successful
+            if ($user->avatar) {
+                Storage::delete($original_user->avatar);
+            }
         }
 
         if ($request->has('email')) {
