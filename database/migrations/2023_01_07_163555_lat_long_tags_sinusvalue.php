@@ -13,7 +13,7 @@ class LatLongTagsSinusvalue extends Migration
      */
     public function up()
     {
-        Schema::table('sinus', function (Blueprint $table) {    
+        Schema::table('sinusvalues', function (Blueprint $table) {    
             $table->double('latitude', 11, 8)->nullable(); 
             $table->double('longitude', 11, 8)->nullable();
             $table->string('tags', 254);
@@ -27,7 +27,7 @@ class LatLongTagsSinusvalue extends Migration
      */
     public function down()
     {
-        Schema::table('sinus', function (Blueprint $table) {    
+        Schema::table('sinusvalues', function (Blueprint $table) {    
             $table->dropColumn('latitude'); 
             $table->dropColumn('longitude');
             $table->dropColumn('tags');
