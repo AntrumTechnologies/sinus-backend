@@ -21,7 +21,7 @@ class SinusController extends Controller
 
 	public function indexExplore()
 	{
-		$retrieveSine = Sinus::all();
+		$retrieveSine = Sinus::where('archived', false)->get();
 		return Response::json($retrieveSine, 200);
 	}
 
@@ -29,7 +29,7 @@ class SinusController extends Controller
 	{
 		$retrieveFollowing = Following::where('user_id', Auth::id())->pluck('following_user_id')->toArray();
 		array_push($retrieveFollowing, Auth::id()); // User always follows themselves
-		$retrieveSine = DB::table('sinuses')->whereIn('user_id', $retrieveFollowing)->get();
+		$retrieveSine = DB::table('sinuses')->whereIn('user_id', $retrieveFollowing)->where('archived', false)->get();
 
 		return Response::json($retrieveSine, 200);
 	}

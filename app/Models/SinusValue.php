@@ -16,5 +16,8 @@ class SinusValue extends Model
 		'sinus_id',
 		'date',
 		'value',
+		'latitude',
+		'longitude',
+		'tags',
 	];
 }

@@ -16,5 +16,6 @@ class Sinus extends Model
 		'name',
 		'user_id',
 		'date_name',
+		'archived',
 	];
 }
