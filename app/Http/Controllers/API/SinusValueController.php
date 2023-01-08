@@ -14,6 +14,9 @@ class SinusValueController extends Controller
 			'sinus_id' => 'required|integer',
 			'date' => 'required|date|before_or_equal:today',
 			'value' => 'required|integer',
+			'latitude' => 'optional',
+			'longitude' => 'optional',
+			'tags' => 'optional|array',
 		]);
 
 		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()->first();
@@ -27,6 +30,9 @@ class SinusValueController extends Controller
 			'sinus_id' => $request->get('sinus_id'),
 			'date' => $request->get('date'),
 			'value' => $request->get('value'),
+			'latitude' => 'optional',
+			'longitude' => 'optional',
+			'tags' => 'optional|array',
 		]);
 
 		$newSinusValue->save();
