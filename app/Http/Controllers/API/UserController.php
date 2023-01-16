@@ -16,8 +16,6 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    use VerifiesEmail;
-
     public $successStatus = 200;
     public $errorStatus = 400;
     public $unauthorisedStatus = 401;
