@@ -51,6 +51,22 @@ class SinusValueController extends Controller
 		return response()->json($sinusValues);
 	}
 
+	// TODO(PATRO): retrieve multiple ID's using one API call
+	// public function show(Request $request)
+	// {
+	// 	$request->validate([
+	// 		'id' => 'required|array',
+	// 	]);
+
+	// 	if ($limit != null) {
+    //     	$sinusValues = SinusValue::where('sinus_id', $id)->orderBy('date', 'DESC')->take($limit)->get();
+	// 	} else {
+	// 		$sinusValues = SinusValue::where('sinus_id', $id)->orderBy('date', 'ASC')->get();
+	// 	}
+    //     $sinusValues = $sinusValues->makeHidden(['id', 'sinus_id', 'created_at', 'updated_at']);
+	// 	return response()->json($sinusValues);
+	// }
+
 	public function delete(Request $request) {
 		$request->validate([
 			'sinus_id' => 'required|integer',
