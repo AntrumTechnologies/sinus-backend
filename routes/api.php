@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use App\Http\Controllers\API\FollowingController;
 use App\Http\Controllers\API\LogController;
@@ -43,3 +44,18 @@ Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 Route::get('user', [UserController::class, 'getDetails'])->middleware('auth:sanctum');
 Route::post('user/update', [UserController::class, 'updateDetails'])->middleware('auth:sanctum');
+
+Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
+Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+ 
+    return response()->json(["success" => ""], 200);
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/resend', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+ 
+    return response()->json(["success" => ""], 200);
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

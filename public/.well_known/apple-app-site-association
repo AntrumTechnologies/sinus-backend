@@ -1,0 +1,19 @@
+{
+  "applinks": {
+      "details": [
+           {
+             "appIDs": [ "27MSAG6A3N.LoveWaves.App", "479GB76B7L.LoveWaves.App" ],
+             "components": [
+               {
+                  "/": "/reset-password/*",
+                  "comment": "Matches any URL with a path that starts with /reset-password/."
+               },
+               {
+                  "/": "/email/verify/*",
+                  "comment": "Matches any URL with a path that starts with /email/verify/."
+               }
+             ]
+           }
+       ]
+   }
+}
