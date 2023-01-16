@@ -48,11 +48,7 @@ Route::post('user/update', [UserController::class, 'updateDetails'])->middleware
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
- 
-    return response()->json(["success" => ""], 200);
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
 
 Route::post('/email/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();

@@ -17,8 +17,4 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
- 
-    return '<h1>Email address was successfully verified. You may now close this window and continue in the app.</h1>';
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
