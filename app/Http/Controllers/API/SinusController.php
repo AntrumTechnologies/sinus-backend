@@ -53,9 +53,16 @@ class SinusController extends Controller
 	}
 
 	public function show($id)
-	{
+    {
         $sinus = Sinus::findOrFail($id);
-		return Response::json($sinus, 200);
+        if (Following::where('user_id', Auth::id())->where('following_user_id', $sinus->user_id)->first()) {
+            $following = true;
+        } else {
+            $following = false;
+        }
+
+        $sinus->following = $following;
+        return Response::json($sinus, 200);
 	}
 
 	public function delete(Request $request)
