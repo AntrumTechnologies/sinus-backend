@@ -48,6 +48,9 @@ Route::post('user/update', [UserController::class, 'updateDetails'])->middleware
 
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+Route::get('reset-password/{token}', function ($token) {
+    return view('auth.reset-password', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
 
 Route::post('/email/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
