@@ -48,7 +48,6 @@ class UserController extends Controller
         */
 
         // TODO(PATBRO): are the three lines of code below necessary?
-        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return response()->json(["success" => "Log out successful"], $this->successStatus);
