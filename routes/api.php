@@ -9,6 +9,7 @@ use App\Http\Controllers\API\LogController;
 use App\Http\Controllers\API\SinusController;
 use App\Http\Controllers\API\SinusValueController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\VerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +22,15 @@ use App\Http\Controllers\API\UserController;
 |
 */
 
-Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware('auth:sanctum');
+Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware(['guest']);
 Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middleware('auth:sanctum');
 Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth:sanctum');
-Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('auth:sanctum');
+Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('guest');
 Route::put('sinus', [SinusController::class, 'store'])->middleware('auth:sanctum');
 Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('auth:sanctum');
-Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->middleware('auth:sanctum');
+Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('guest');
+Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->middleware('guest');
 Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth:sanctum');
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth:sanctum');
 
@@ -46,12 +47,16 @@ Route::get('user', [UserController::class, 'getDetails'])->middleware('auth:sanc
 Route::post('user/update', [UserController::class, 'updateDetails'])->middleware('auth:sanctum');
 
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
-Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
-
-Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
+Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
 Route::post('/email/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
  
     return response()->json(["success" => ""], 200);
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+})->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify', function () {
+    return 'Verify your email address';
+})->middleware('auth:sanctum')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
