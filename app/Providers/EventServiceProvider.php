@@ -18,6 +18,12 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        NewWave::class => [
+            SendNewWaveNotification::class,
+        ],
+        NewWaveValue::class => [
+            SendNewWaveValueNotification::class,
+        ],
     ];
 
     /**
