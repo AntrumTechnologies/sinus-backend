@@ -88,12 +88,17 @@ class UserController extends Controller
 
     public function resetPassword(Request $request)
     {
-        $request->validate([
+        $rules = [
             'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed',
-        ]);
-     
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if($validator->fails()) {
+            return $validator->messages();
+        }
+
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
@@ -106,7 +111,7 @@ class UserController extends Controller
                 event(new PasswordReset($user));
             }
         );
-     
+
         return $status === Password::PASSWORD_RESET
             ? response()->json(["success" => $status], $this->successStatus)
             : response()->json(["error" => $status], $this->errorStatus);
