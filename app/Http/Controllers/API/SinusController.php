@@ -22,6 +22,15 @@ class SinusController extends Controller
 	public function indexExplore()
 	{
 		$retrieveSine = Sinus::where('archived', false)->get();
+		foreach ($retrieveSine as $sinus) {
+			// Determine whether user is following the sinus already or not
+			if (Following::where('user_id', Auth::id())->where('following_user_id', $sinus->user_id)->first()) {
+				$sinus->following = true;
+			} else {
+				$sinus->following = false;
+			}
+		}
+
 		return Response::json($retrieveSine, 200);
 	}
 
@@ -30,6 +39,9 @@ class SinusController extends Controller
 		$retrieveFollowing = Following::where('user_id', Auth::id())->pluck('following_user_id')->toArray();
 		array_push($retrieveFollowing, Auth::id()); // User always follows themselves
 		$retrieveSine = DB::table('sinuses')->whereIn('user_id', $retrieveFollowing)->where('archived', false)->get();
+		foreach ($retrieveSine as $sinus) {
+			$sinus->following = true;
+		}
 
 		return Response::json($retrieveSine, 200);
 	}
