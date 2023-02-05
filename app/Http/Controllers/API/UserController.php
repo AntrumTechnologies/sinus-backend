@@ -26,7 +26,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->notify(new NewWave);
 
-        return reponse()->json(["success" => ""], $this->successStatus);
+        return response()->json(["success" => ""], $this->successStatus);
     }
 
     public function login(Request $request)
@@ -143,7 +143,8 @@ class UserController extends Controller
             'password' => 'sometimes',
             'confirm_password' => 'sometimes|required|same:password',
             'avatar' => 'sometimes|mimes:jpeg,png|max:2048',
-            'email' => 'sometimes|email|unique:users,email',
+	    'email' => 'sometimes|email|unique:users,email',
+	    'fcm_token' => 'sometimes',
         ]);
 
         if ($validator->fails()) {
@@ -172,6 +173,10 @@ class UserController extends Controller
         if ($request->has('email')) {
             $user->email = $request->input('email');
         }
+
+        if ($request->has('fcm_token')) {
+            $user->fcm_token = $request->input('fcm_token');
+	}
 
         $user->save();
         Log::info("Details for user ID ". $user->id ." were updated successfully");

@@ -22,7 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'avatar',
+	'avatar',
+	'fcm_token',
     ];
 
     /**
@@ -51,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function routeNotificationForFcm()
     {
-        return 'fEa251LB6E_cj2awX1Exfi:APA91bFQjPDqKH3MRqEANeh0shKK0vtr2ASDGsk5-TM31CkVBCpjbXc1iggWOCJsO0eLbmoZT-ZiLJG5URqplJxzrikVKjA2d0dUifO9KUKOVzcpUCp49qkUu5p56JtaNcURBM4WTSII';
-        return $this->fcm_token;
+	Log::debug("Sending notification to device with FCM token ". $this->fcm_token);
+	return $this->fcm_token;
     }
 }
