@@ -7,6 +7,8 @@ use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -52,7 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function routeNotificationForFcm()
     {
-	Log::debug("Sending notification to device with FCM token ". $this->fcm_token);
+	Log::debug("Sending notification to device with FCM token ". $this->fcm_token, ['user_id' => Auth::id()]);
 	return $this->fcm_token;
     }
 }
