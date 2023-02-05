@@ -44,6 +44,7 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 Route::get('user', [UserController::class, 'getDetails'])->middleware('auth:sanctum');
+Route::get('sendNotification', [UserController::class, 'notify'])->middleware('auth:sanctum');
 Route::post('user/update', [UserController::class, 'updateDetails'])->middleware('auth:sanctum');
 
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');

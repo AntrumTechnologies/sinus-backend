@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\NewWave;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,6 +20,14 @@ class UserController extends Controller
     public $successStatus = 200;
     public $errorStatus = 400;
     public $unauthorisedStatus = 401;
+
+    public function notify()
+    {
+        $user = Auth::user();
+        $user->notify(new NewWave);
+
+        return reponse()->json(["success" => ""], $this->successStatus);
+    }
 
     public function login(Request $request)
     {

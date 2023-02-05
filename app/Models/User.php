@@ -43,4 +43,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    /**
+     * Specifies the user's FCM token
+     *
+     * @return string|array
+     */
+    public function routeNotificationForFcm()
+    {
+        return 'fEa251LB6E_cj2awX1Exfi:APA91bFQjPDqKH3MRqEANeh0shKK0vtr2ASDGsk5-TM31CkVBCpjbXc1iggWOCJsO0eLbmoZT-ZiLJG5URqplJxzrikVKjA2d0dUifO9KUKOVzcpUCp49qkUu5p56JtaNcURBM4WTSII';
+        return $this->fcm_token;
+    }
 }
