@@ -27,6 +27,7 @@ Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middlewar
 Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth:sanctum');
 Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('guest');
 Route::put('sinus', [SinusController::class, 'store'])->middleware('auth:sanctum');
+Route::put('sinus/update', [SinusController::class, 'update'])->middleware('auth:sanctum');
 Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth:sanctum');
 
 Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('guest');

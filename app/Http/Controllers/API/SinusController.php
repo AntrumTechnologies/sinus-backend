@@ -51,12 +51,19 @@ class SinusController extends Controller
 		$request->validate([
 			'name' => 'required|max:30',
 			'date_name' => 'required|max:30',
+			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 		]);
+
+		$avatar = null;
+		if ($request->has('avatar')) {
+			$avatar = Storage::putFile('avatars', $request->file('avatar'));
+		}
 
 		$newSinus = new Sinus([
 			'name' => $request->get('name'),
 			'user_id' => Auth::id(),
 			'date_name' => $request->get('date_name'),
+			'avatar' => $avatar,
         ]);
 
         $newSinus->save();
@@ -77,6 +84,36 @@ class SinusController extends Controller
         return Response::json($sinus, 200);
 	}
 
+	public function update(Request $request)
+	{
+		$request->validate([
+			'id' => 'required|integer',
+			'date_name' => 'sometimes|max:30',
+			'archived' => 'sometimes|boolean',
+			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
+		]);
+
+		$sinus = Sinus::where('id', $request->get('id'));
+		if ($request->has('date_name')) {
+			$sinus->date_name = $request->has('date_name');
+		}
+
+		if ($request->has('archived')) {
+			$sinus->archived = $request->has('archived');
+		}
+
+		if ($request->has('avatar')) {
+			if ($sinus->avatar != null) {
+                Storage::delete($sinus->avatar);
+            }
+
+			$sinus->avatar = Storage::putFile('avatars', $request->file('avatar'));
+		}
+
+		$sinus->save();
+		return Response::json($sinus, 200);
+	}
+
 	public function delete(Request $request)
 	{
 		$request->validate([
@@ -84,6 +121,7 @@ class SinusController extends Controller
 		]);
 
 		$sinus = Sinus::where('id', $request->get('id'));
+		Storage::delete($sinus->avatar);
 		$sinusDeletion = $sinus->delete();
 		if (!$sinusDeletion) {
 			return Response::json($sinus, 200);
