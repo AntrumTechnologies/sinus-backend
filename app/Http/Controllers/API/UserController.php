@@ -142,7 +142,7 @@ class UserController extends Controller
             'name' => 'sometimes',
             'password' => 'sometimes',
             'confirm_password' => 'sometimes|required|same:password',
-            'avatar' => 'sometimes|mimes:jpeg,png|max:2048',
+            'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 	    'email' => 'sometimes|email|unique:users,email',
 	    'fcm_token' => 'sometimes',
         ]);
