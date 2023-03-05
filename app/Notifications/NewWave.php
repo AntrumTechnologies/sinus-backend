@@ -47,9 +47,8 @@ class NewWave extends Notification
         return FcmMessage::create()
             ->setData(['data1' => 'value', 'data2' => 'value2'])
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('Account Activated')
-                ->setBody('Your account has been activated.')
-                ->setImage('http://example.com/url-to-image-here.png'))
+                ->setTitle('Wave added')
+                ->setBody('A new wave has been added by one of your friends!'))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))
