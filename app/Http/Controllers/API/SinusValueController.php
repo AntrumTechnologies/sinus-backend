@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\SinusValue;
+use App\Providers\NewWaveValue;
 use Illuminate\Http\Request;
 
 class SinusValueController extends Controller
@@ -17,6 +18,7 @@ class SinusValueController extends Controller
             'latitude' => 'sometimes',
             'longtitude' => 'sometimes',
 			'tags' => 'sometimes|required|array',
+			'description' => 'sometimes',
 		]);
 
 		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()->first();
@@ -33,9 +35,12 @@ class SinusValueController extends Controller
 			'latitude' => $request->get('latitude'),
 			'longitude' => $request->get('longitude'),
 			'tags' => $request->get('tags'),
+			'description' => $request->get('description'),
 		]);
 
 		$newSinusValue->save();
+
+		NewWaveValue::dispatch($newSinusValue);
 
 		return response()->json($newSinusValue);
 	}

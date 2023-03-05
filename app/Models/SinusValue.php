@@ -19,5 +19,6 @@ class SinusValue extends Model
 		'latitude',
 		'longitude',
 		'tags',
+		'description',
 	];
 }
