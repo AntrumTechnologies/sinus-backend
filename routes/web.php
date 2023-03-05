@@ -17,6 +17,13 @@ use App\Http\Controllers\VerificationController;
 |
 */
 
+Route::get('reset-password/{token}', function ($token) {
+    return view('auth.passwords.reset', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 
 //Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware(['signed'])->name('verification.verify');
+
+Auth::routes();
+
