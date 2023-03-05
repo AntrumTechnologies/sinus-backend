@@ -45,12 +45,13 @@ Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login'])->name('login');
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 Route::get('user', [UserController::class, 'getDetails'])->middleware('auth:sanctum');
+Route::get('sendNotification', [UserController::class, 'notify'])->middleware('auth:sanctum');
 Route::post('user/update', [UserController::class, 'updateDetails'])->middleware('auth:sanctum');
 
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 Route::get('reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
+    return view('auth.passwords.reset', ['token' => $token]);
 })->middleware('guest')->name('password.reset');
 
 Route::post('/email/resend', function (Request $request) {
