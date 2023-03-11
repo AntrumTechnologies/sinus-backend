@@ -13,7 +13,9 @@ class SinusArchivedNullable extends Migration
      */
     public function up()
     {
-        $table->boolean('archived')->nullable()->change();
+	Schema::table('sinuses', function (Blueprint $table) {
+	    $table->boolean('archived')->nullable()->change();
+	});
     }
 
     /**
