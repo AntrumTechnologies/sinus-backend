@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\NewWave;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +79,9 @@ class UserController extends Controller
         $validated = $validator->validated();
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
+
+        // Send email to verify emailaddress to user
+        event(new Registered($user));
 
         $token = User::where('email', $request->email)->first()->createToken('')->plainTextToken;
         return response()->json(["success" => $token], $this->successStatus);
