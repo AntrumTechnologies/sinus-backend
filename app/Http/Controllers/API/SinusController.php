@@ -83,7 +83,7 @@ class SinusController extends Controller
 
         $newSinus->save();
 
-		return Response::json($newSinus, 200);
+		return Response::json("Successfully added new wave", 200);
 	}
 
 	public function show($id)
@@ -126,7 +126,7 @@ class SinusController extends Controller
 		}
 
 		$sinus->save();
-		return Response::json($sinus, 200);
+		return Response::json("Wave has been updated", 200);
 	}
 
 	public function delete(Request $request)
@@ -148,6 +148,6 @@ class SinusController extends Controller
 			Sinus::onlyTrashed()->where('id', $request->get('id'))->restore();
 		}
 
-		return Response::json($sinusValues, 200);
+		return Response::json("Wave has been permanently deleted", 200);
 	}
 }
