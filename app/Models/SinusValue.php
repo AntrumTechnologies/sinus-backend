@@ -30,6 +30,11 @@ class SinusValue extends Model
 		return;
 	}
 
+	public function getFcmTokens()
+	{
+		return $this->fcm_tokens;
+	}
+
 	/**
 	 * Specifies the user's FCM token
 	 *

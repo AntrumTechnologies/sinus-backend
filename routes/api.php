@@ -30,11 +30,11 @@ Route::put('sinus', [SinusController::class, 'store'])->middleware('auth:sanctum
 Route::put('sinus/update', [SinusController::class, 'update'])->middleware('auth:sanctum');
 Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth:sanctum');
 
+Route::get('sinusvalue/notify/{sinus_id}', [SinusValueController::class, 'notify'])->middleware('auth:sanctum');
 Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
 Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth:sanctum');
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth:sanctum');
-Route::get('sinusvalue/notify/{sinus_id}', [SinusValueController::class, 'notify'])->middleware('auth:sanctum');
 
 Route::get('following', [FollowingController::class, 'index'])->middleware('auth:sanctum');
 Route::put('follow', [FollowingController::class, 'store'])->middleware('auth:sanctum');
