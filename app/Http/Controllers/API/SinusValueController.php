@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Following;
+use App\Models\Sinus;
 use App\Models\SinusValue;
+use App\Models\User;
 use App\Providers\NewWaveValue;
 use Illuminate\Http\Request;
 
@@ -11,15 +14,20 @@ class SinusValueController extends Controller
 {
     public function notify($sinus_id)
     {
-		$retrieveSine = Sinus::where('id', $sinus_id)->first();
+		$retrieveSine = Sinus::findOrFail($sinus_id);
 		$retrieveFollowers = Following::where('following_user_id', $retrieveSine->user_id)->pluck('user_id')->toArray();
 
-		return response()->json($retrieveFollowers, 200);
+		$fcm_tokens = [];
+		foreach ($retrieveFollowers as $user_id) {
+			$retrieveUser = User::findOrFail($user_id);
+			if ($retrieveUser->fcm_token != null) {
+				array_push($fcm_tokens, $retrieveUser->fcm_token);
+			}
+		}
 
-		SinusValue::updateFcmTokens($fcm_tokens);
-
-		$user = Auth::user();
-		$user->notify(new NewWave);
+		$sinusValue = SinusValue::where('sinus_id', $sinus_id)->latest()->first();
+		$sinusValue->updateFcmTokens($fcm_tokens);
+		$sinusValue->notify(new NewWaveValue);
 
 		return response()->json(["success" => ""], $this->successStatus);
     }
