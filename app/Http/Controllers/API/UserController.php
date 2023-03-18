@@ -37,8 +37,7 @@ class UserController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        if (Auth::guard('web')->attempt($credentials)) {
             $token = User::where('email', $request->email)->first()->createToken('')->plainTextToken;
             return response()->json(["success" => $token], $this->successStatus);
         }
@@ -57,9 +56,6 @@ class UserController extends Controller
         $token->delete();
         */
 
-        // TODO(PATBRO): are the three lines of code below necessary?
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return response()->json(["success" => "Log out successful"], $this->successStatus);
     }
 
