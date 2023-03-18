@@ -14,14 +14,17 @@ use NotificationChannels\Fcm\Resources\ApnsFcmOptions;
 
 class NewWaveValue extends Notification
 {
+	public $userName;
+
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($userName)
     {
-        //
+        $this->userName = $userName;
     }
 
     /**
@@ -40,7 +43,7 @@ class NewWaveValue extends Notification
         return FcmMessage::create()
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
                 ->setTitle('New wave value')
-                ->setBody('A new value has been added to the waves of one of your friends! Check it out!'))
+                ->setBody('A new value has been added to one of the waves of '. $this->userName))
             ->setAndroid(
                 AndroidConfig::create()
                     ->setFcmOptions(AndroidFcmOptions::create()->setAnalyticsLabel('analytics'))

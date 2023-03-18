@@ -30,7 +30,7 @@ class SinusValueController extends Controller
 		// Retrieve arbitrary sinus value in order to send the notification
 		$sinusValue = SinusValue::where('sinus_id', $sinus_id)->latest()->first();
 		$sinusValue->updateFcmTokens($fcm_tokens);
-		$sinusValue->notify(new NewWaveValue);
+		$sinusValue->notify(new NewWaveValue($retrieveSine->name));
 	}
 	
 	public function notify($sinus_id)
