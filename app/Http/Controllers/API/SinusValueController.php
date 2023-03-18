@@ -9,6 +9,21 @@ use Illuminate\Http\Request;
 
 class SinusValueController extends Controller
 {
+    public function notify($sinus_id)
+    {
+		$retrieveSine = Sinus::where('id', $sinus_id)->first();
+		$retrieveFollowers = Following::where('following_user_id', $retrieveSine->user_id)->pluck('user_id')->toArray();
+
+		return response()->json($retrieveFollowers, 200);
+
+		SinusValue::updateFcmTokens($fcm_tokens);
+
+		$user = Auth::user();
+		$user->notify(new NewWave);
+
+		return response()->json(["success" => ""], $this->successStatus);
+    }
+
 	public function store(Request $request)
 	{
 		$request->validate([
