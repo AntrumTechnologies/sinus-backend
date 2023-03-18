@@ -133,7 +133,7 @@ class UserController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-            return response()->json(["success" => $user], $this->successStatus);
+            return response()->json($user, $this->successStatus);
         }
 
         return response()->json(["error" => "Failed to retrieve user details"], $this->successStatus);
