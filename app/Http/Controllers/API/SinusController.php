@@ -16,18 +16,25 @@ class SinusController extends Controller
 	public function indexCreated()
 	{
 		$createdSinuses = Sinus::where('user_id', Auth::id())->get();
+		foreach ($createdSinuses as $sinus) {
+			$sinus->following = true;
+		}
 		return Response::json($createdSinuses, 200);
 	}
 
 	public function indexExplore()
 	{
-		$retrieveSine = Sinus::where('archived', false)->get();
+		$retrieveSine = Sinus::orWhere('archived', false)->orWhere('archived', null)->get();
 		foreach ($retrieveSine as $sinus) {
 			// Determine whether user is following the sinus already or not
-			if (Following::where('user_id', Auth::id())->where('following_user_id', $sinus->user_id)->first()) {
-				$sinus->following = true;
-			} else {
+			if (Auth::guest()) {
 				$sinus->following = false;
+			} else {
+				if (Following::where('user_id', Auth::id())->where('following_user_id', $sinus->user_id)->first() || $sinus->user_id == Auth::id()) {
+					$sinus->following = true;
+				} else {
+					$sinus->following = false;
+				}
 			}
 		}
 
@@ -37,8 +44,16 @@ class SinusController extends Controller
 	public function indexFollowing()
 	{
 		$retrieveFollowing = Following::where('user_id', Auth::id())->pluck('following_user_id')->toArray();
-		array_push($retrieveFollowing, Auth::id()); // User always follows themselves
-		$retrieveSine = DB::table('sinuses')->whereIn('user_id', $retrieveFollowing)->where('archived', false)->get();
+		if (!Auth::guest()) {
+			array_push($retrieveFollowing, Auth::id()); // User always follows themselves
+		}
+
+		$retrieveSine = DB::table('sinuses')->where(function ($query) use ($retrieveFollowing) {
+			$query->whereIn('user_id', $retrieveFollowing)->where('archived', false);
+		})->orWhere(function ($query) use ($retrieveFollowing) {
+			$query->whereIn('user_id', $retrieveFollowing)->where('archived', null);
+		})->get();
+
 		foreach ($retrieveSine as $sinus) {
 			$sinus->following = true;
 		}
