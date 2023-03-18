@@ -7,13 +7,15 @@ use App\Models\Following;
 use App\Models\Sinus;
 use App\Models\SinusValue;
 use App\Models\User;
-use App\Providers\NewWaveValue;
+use App\Notifications\NewWaveValue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Log;
 
 class SinusValueController extends Controller
 {
-    public function notify($sinus_id)
-    {
+	function sendNotification($sinus_id) {
 		$retrieveSine = Sinus::findOrFail($sinus_id);
 		$retrieveFollowers = Following::where('following_user_id', $retrieveSine->user_id)->pluck('user_id')->toArray();
 
@@ -25,21 +27,26 @@ class SinusValueController extends Controller
 			}
 		}
 
+		// Retrieve arbitrary sinus value in order to send the notification
 		$sinusValue = SinusValue::where('sinus_id', $sinus_id)->latest()->first();
 		$sinusValue->updateFcmTokens($fcm_tokens);
 		$sinusValue->notify(new NewWaveValue);
-
-		return response()->json(["success" => ""], $this->successStatus);
-    }
+	}
+	
+	public function notify($sinus_id)
+	{
+		$this->sendNotification($sinus_id);
+		return Response::json("Success", 200);
+	}
 
 	public function store(Request $request)
 	{
 		$request->validate([
 			'sinus_id' => 'required|integer',
 			'date' => 'required|date|before_or_equal:today',
-            'value' => 'required|integer',
-            'latitude' => 'sometimes',
-            'longtitude' => 'sometimes',
+			'value' => 'required|integer',
+			'latitude' => 'sometimes',
+			'longtitude' => 'sometimes',
 			'tags' => 'sometimes|required|array',
 			'description' => 'sometimes',
 		]);
@@ -63,9 +70,8 @@ class SinusValueController extends Controller
 
 		$newSinusValue->save();
 
-		NewWaveValue::dispatch($newSinusValue);
-
-		return response()->json($newSinusValue);
+		$this->sendNotification($request->get('sinus_id'));
+		return response()->json("Successfully added new wave value!");
 	}
 
 	public function show($id, $limit = null)
@@ -75,7 +81,8 @@ class SinusValueController extends Controller
 		} else {
 			$sinusValues = SinusValue::where('sinus_id', $id)->orderBy('date', 'ASC')->get();
 		}
-        $sinusValues = $sinusValues->makeHidden(['id', 'sinus_id', 'created_at', 'updated_at']);
+		
+		$sinusValues = $sinusValues->makeHidden(['id', 'sinus_id', 'created_at', 'updated_at']);
 		return response()->json($sinusValues);
 	}
 
