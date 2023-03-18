@@ -22,16 +22,16 @@ use App\Http\Controllers\VerificationController;
 |
 */
 
-Route::get('sinus', [SinusController::class, 'indexExplore'])->middleware(['guest']);
+Route::get('sinus', [SinusController::class, 'indexExplore']);
 Route::get('sinus/created', [SinusController::class, 'indexCreated'])->middleware('auth:sanctum');
 Route::get('sinus/following', [SinusController::class, 'indexFollowing'])->middleware('auth:sanctum');
-Route::get('sinus/{id}', [SinusController::class, 'show'])->middleware('guest');
+Route::get('sinus/{id}', [SinusController::class, 'show']);
 Route::put('sinus', [SinusController::class, 'store'])->middleware('auth:sanctum');
 Route::put('sinus/update', [SinusController::class, 'update'])->middleware('auth:sanctum');
 Route::put('sinus/delete', [SinusController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::get('sinusvalue/{id}', [SinusValueController::class, 'show'])->middleware('guest');
-Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show'])->middleware('guest');
+Route::get('sinusvalue/{id}', [SinusValueController::class, 'show']);
+Route::get('sinusvalue/{id}/{limit}', [SinusValueController::class, 'show']);
 Route::put('sinusvalue', [SinusValueController::class, 'store'])->middleware('auth:sanctum');
 Route::put('sinusvalue/delete', [SinusValueController::class, 'delete'])->middleware('auth:sanctum');
 
@@ -50,9 +50,9 @@ Route::post('user/update', [UserController::class, 'updateDetails'])->middleware
 
 Route::post('forgot-password', [UserController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::post('reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
-Route::get('reset-password/{token}', function ($token) {
-    return view('auth.passwords.reset', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
+//Route::get('reset-password/{token}', function ($token) {
+//    return view('auth.passwords.reset', ['token' => $token]);
+//})->middleware('guest')->name('password.reset');
 
 Route::post('/email/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
