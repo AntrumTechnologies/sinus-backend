@@ -17,6 +17,14 @@ class SinusController extends Controller
 	{
 		$createdSinuses = Sinus::where('user_id', Auth::id())->get();
 		foreach ($createdSinuses as $sinus) {
+			// Retrieve avatar
+			$sinus->avatar = null;
+			$user = User::findOrFail($sinus->user_id);
+			if ($user) {
+				$sinus->avatar = $user->avatar;
+			}
+
+			// Set following to true for created waves
 			$sinus->following = true;
 		}
 		return Response::json($createdSinuses, 200);
@@ -26,7 +34,14 @@ class SinusController extends Controller
 	{
 		$retrieveSine = Sinus::orWhere('archived', false)->orWhere('archived', null)->get();
 		foreach ($retrieveSine as $sinus) {
-			// Determine whether user is following the sinus already or not
+			// Retrieve avatar
+			$sinus->avatar = null;
+			$user = User::findOrFail($sinus->user_id);
+			if ($user) {
+				$sinus->avatar = $user->avatar;
+			}
+
+			// Determine whether user is following the wave already or not
 			if (Auth::guest()) {
 				$sinus->following = false;
 			} else {
@@ -55,6 +70,14 @@ class SinusController extends Controller
 		})->get();
 
 		foreach ($retrieveSine as $sinus) {
+			// Retrieve avatar
+			$sinus->avatar = null;
+			$user = User::findOrFail($sinus->user_id);
+			if ($user) {
+				$sinus->avatar = $user->avatar;
+			}
+
+			// Set following to true for all waves
 			$sinus->following = true;
 		}
 
