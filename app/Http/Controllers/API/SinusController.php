@@ -88,8 +88,7 @@ class SinusController extends Controller
 	public function store(Request $request)
     {
 		$request->validate([
-			'name' => 'required|max:30',
-			'date_name' => 'required|max:30',
+			'wave_name' => 'required|max:30',
 			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 		]);
 
@@ -99,9 +98,9 @@ class SinusController extends Controller
 		}
 
 		$newSinus = new Sinus([
-			'name' => $request->get('name'),
+			'name' => Auth::user()->name,
 			'user_id' => Auth::id(),
-			'date_name' => $request->get('date_name'),
+			'date_name' => $request->get('wave_name'),
 			'avatar' => $avatar,
         ]);
 
