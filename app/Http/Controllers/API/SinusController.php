@@ -158,17 +158,27 @@ class SinusController extends Controller
 			'id' => 'required|integer',
 		]);
 
-		$sinus = Sinus::where('id', $request->get('id'));
-		Storage::delete($sinus->avatar);
+		// Fetch wave by ID and also created by this user
+		$sinus = Sinus::where('id', $request->get('id'))->where('user_id', Auth::id());
+		if (!$sinus) {
+			return Response::json("You are not allowed to delete this wave", 401);
+		}
+
+		// Delete wave avatar if it exists
+		if ($sinus->avatar) {
+			Storage::delete($sinus->avatar);
+		}
+
 		$sinusDeletion = $sinus->delete();
 		if (!$sinusDeletion) {
-			return Response::json($sinus, 200);
+			return Response::json("Failed to delete wave", 500);
 		}
 		
 		$sinusValues = SinusValue::where('sinus_id', $request->get('id'));
 		if (!$sinusValues->delete() && $sinusDeletion) {
 			// Rollback Sinus deletion if sinusValue deletion failed
 			Sinus::onlyTrashed()->where('id', $request->get('id'))->restore();
+			return Response::json("Failed to delete wave values", 500);
 		}
 
 		return Response::json("Wave has been permanently deleted", 200);
