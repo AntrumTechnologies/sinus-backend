@@ -64,7 +64,7 @@ class SinusController extends Controller
 			array_push($retrieveFollowing, Auth::id()); // User always follows themselves
 		}
 
-		$retrieveSine = DB::table('sinuses')->where(function ($query) use ($retrieveFollowing) {
+		$retrieveSine = Sinus::where(function ($query) use ($retrieveFollowing) {
 			$query->whereIn('user_id', $retrieveFollowing)->where('archived', false);
 		})->orWhere(function ($query) use ($retrieveFollowing) {
 			$query->whereIn('user_id', $retrieveFollowing)->where('archived', null);
@@ -159,8 +159,8 @@ class SinusController extends Controller
 		]);
 
 		// Fetch wave by ID and also created by this user
-		$sinus = Sinus::where('id', $request->get('id'))->where('user_id', Auth::id());
-		if (!$sinus) {
+		$sinus = Sinus::findOrFail($request->get('id'));
+		if (Auth::id() != $sinus->user_id) {
 			return Response::json("You are not allowed to delete this wave", 401);
 		}
 
@@ -175,11 +175,7 @@ class SinusController extends Controller
 		}
 		
 		$sinusValues = SinusValue::where('sinus_id', $request->get('id'));
-		if (!$sinusValues->delete() && $sinusDeletion) {
-			// Rollback Sinus deletion if sinusValue deletion failed
-			Sinus::onlyTrashed()->where('id', $request->get('id'))->restore();
-			return Response::json("Failed to delete wave values", 500);
-		}
+		$sinusValues->delete();
 
 		return Response::json("Wave has been permanently deleted", 200);
 	}
