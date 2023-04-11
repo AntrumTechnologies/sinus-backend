@@ -23,7 +23,7 @@ class VerificationController extends Controller
     {
         $user = User::find($request->route('id'));
         if ($user->email_verified_at) {
-            return true;
+            return "<h1>Successfully verified your email! You may close this page now.</h1>";
         }
 
         if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
@@ -33,6 +33,6 @@ class VerificationController extends Controller
         if ($user->markEmailAsVerified())
             event(new Verified($user));
 
-        return true;
+        return "<h1>Successfully verified your email! You may close this page now.</h1>";
     }
 }
