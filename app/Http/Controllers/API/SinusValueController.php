@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class SinusValueController extends Controller
 {
@@ -41,7 +42,7 @@ class SinusValueController extends Controller
 
 	public function store(Request $request)
 	{
-		$validated = $request->validate([
+		$validator = Validator::make($request->all(), [
 			'sinus_id' => 'required|integer',
 			'date' => 'required|date|before_or_equal:today',
 			'value' => 'required|integer',
@@ -51,32 +52,24 @@ class SinusValueController extends Controller
 			'description' => 'sometimes',
 		]);
 
-		$errorMessages = $validated->messages();
-		if ($errorMessages->get('date')) {
-			return Response::json("Invalid date. Date should be before or equal to today", 400);
+		if ($validator->fails()) {
+			return Response::json($validator->errors()->first(), 500);	
 		}
 
-		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()->first();
+		$request = $validator->safe()->all();
+
+		$latestSinusValue = SinusValue::where('sinus_id', $request['sinus_id'])->latest()->first();
 		if ($latestSinusValue) {
-			if (strtotime($request->get('date')) <= strtotime($latestSinusValue->date)) {
-				return response()->json('Given date before or equal to latest date');
+			if (strtotime($request['date']) <= strtotime($latestSinusValue->date)) {
+				return Response::json('Given date before or equal to latest date');
 			}
 		}
 
-		$newSinusValue = new SinusValue([
-			'sinus_id' => $request->get('sinus_id'),
-			'date' => $request->get('date'),
-			'value' => $request->get('value'),
-			'latitude' => $request->get('latitude'),
-			'longitude' => $request->get('longitude'),
-			'tags' => $request->get('tags'),
-			'description' => $request->get('description'),
-		]);
-
+		$newSinusValue = new SinusValue($request);
 		$newSinusValue->save();
 
-		$this->sendNotification($request->get('sinus_id'));
-		return response()->json("Successfully added new wave value!");
+		$this->sendNotification($request['sinus_id']);
+		return Response::json("Successfully added new wave value");
 	}
 
 	public function show($id, $limit = null)
