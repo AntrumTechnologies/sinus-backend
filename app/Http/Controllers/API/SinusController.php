@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class SinusController extends Controller
 {
@@ -87,10 +88,14 @@ class SinusController extends Controller
 
 	public function store(Request $request)
     {
-		$request->validate([
+		$validator = Validator::make($request->all(), [
 			'wave_name' => 'required|max:30',
 			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 		]);
+
+		if ($validator->fails()) {
+			return Response::json($validator->errors()->first(), 400);	
+		}
 
 		$avatar = null;
 		if ($request->has('avatar')) {
