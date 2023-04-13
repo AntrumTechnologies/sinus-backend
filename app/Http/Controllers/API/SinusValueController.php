@@ -41,7 +41,7 @@ class SinusValueController extends Controller
 
 	public function store(Request $request)
 	{
-		$request->validate([
+		$validated = $request->validate([
 			'sinus_id' => 'required|integer',
 			'date' => 'required|date|before_or_equal:today',
 			'value' => 'required|integer',
@@ -50,6 +50,11 @@ class SinusValueController extends Controller
 			'tags' => 'sometimes|required|array',
 			'description' => 'sometimes',
 		]);
+
+		$errorMessages = $validated->messages();
+		if ($errorMessages->get('date')) {
+			return Response::json("Invalid date. Date should be before or equal to today", 400);
+		}
 
 		$latestSinusValue = SinusValue::where('sinus_id', $request->get('sinus_id'))->latest()->first();
 		if ($latestSinusValue) {
