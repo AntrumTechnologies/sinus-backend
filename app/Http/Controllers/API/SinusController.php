@@ -97,6 +97,13 @@ class SinusController extends Controller
 			return Response::json($validator->errors()->first(), 400);	
 		}
 
+		$createdSinuses = Sinus::where('user_id', Auth::id())->get();
+		foreach ($createdSinuses as $sinus) {
+			if ($sinus->name == $request->get('wave_name')) {
+				return Response::json("Another wave with the same name already exists", 400);
+			}
+		}
+
 		$avatar = null;
 		if ($request->has('avatar')) {
 			$avatar = Storage::putFile('avatars', $request->file('avatar'));
