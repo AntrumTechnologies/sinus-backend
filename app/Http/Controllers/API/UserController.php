@@ -143,8 +143,8 @@ class UserController extends Controller
             'password' => 'sometimes',
             'confirm_password' => 'sometimes|required|same:password',
             'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
-	    'email' => 'sometimes|email|unique:users,email',
-	    'fcm_token' => 'sometimes',
+            'email' => 'sometimes|email|unique:users,email',
+            'fcm_token' => 'sometimes',
         ]);
 
         if ($validator->fails()) {
@@ -170,13 +170,19 @@ class UserController extends Controller
             $user->avatar = Storage::putFile('avatars', $request->file('avatar'));
         }
 
-        if ($request->has('email')) {
-            $user->email = $request->input('email');
-        }
-
         if ($request->has('fcm_token')) {
             $user->fcm_token = $request->input('fcm_token');
-	}
+        }
+
+        if ($request->has('email') && $request->get('email') != $user->email) {
+            $user->email = $request->input('email');
+
+            // Unset that email address is verified
+            $user->email_verified_at = null;
+
+            // Verify new email address of user
+            event(new Registered($user));
+        }
 
         $user->save();
         Log::info("Details for user ID ". $user->id ." were updated successfully");
