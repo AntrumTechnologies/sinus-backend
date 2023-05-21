@@ -40,6 +40,10 @@ Route::get('following', [FollowingController::class, 'index'])->middleware('auth
 Route::put('follow', [FollowingController::class, 'store'])->middleware('auth:sanctum');
 Route::put('unfollow', [FollowingController::class, 'delete'])->middleware('auth:sanctum');
 
+Route::get('likes/{wave_id}', [FollowingController::class, 'index'])->middleware('auth:sanctum');
+Route::put('like', [FollowingController::class, 'store'])->middleware('auth:sanctum');
+Route::put('dislike', [FollowingController::class, 'delete'])->middleware('auth:sanctum');
+
 Route::put('log', [LogController::class, 'store'])->middleware('auth:sanctum');
 
 Route::post('register', [UserController::class, 'register']);

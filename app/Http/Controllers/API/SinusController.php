@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Sinus;
 use App\Models\SinusValue;
 use App\Models\Following;
+use App\Models\Likes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,17 @@ class SinusController extends Controller
 					$sinus->following = true;
 				} else {
 					$sinus->following = false;
+				}
+			}
+
+			// Determine whether user likes this wave
+			if (Auth::guest()) {
+				$sinus->liked = false;
+			} else {
+				if (Likes::where('user_id', Auth::id())->where('wave_id', $sinus->id)->first() || $sinus->user_id == Auth::id()) {
+					$sinus->liked = true;
+				} else {
+					$sinus->liked = false;
 				}
 			}
 		}

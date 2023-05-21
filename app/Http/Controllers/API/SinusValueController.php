@@ -53,7 +53,7 @@ class SinusValueController extends Controller
 		]);
 
 		if ($validator->fails()) {
-			return Response::json($validator->errors()->first(), 500);	
+			return Response::json($validator->errors()->first(), 400);	
 		}
 
 		$request = $validator->safe()->all();
