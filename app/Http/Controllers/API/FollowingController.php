@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
-
 class FollowingController extends Controller
 {
     // Retrieve list of all users that the current user is following
@@ -38,7 +37,7 @@ class FollowingController extends Controller
                 ['following_user_id', '=', $request->get('user_id_to_unfollow')],
             ])->firstOrFail();
 
-            Log::notice("Follow call was executed even though combination of user ID (". Auth::id() .") and following user ID (". $request->get('user_id_to_unfollow') .") is already present in table");
+            Log::notice("Follow call was executed even though combination of user ID (". Auth::id() .") and following user ID (". $request->get('user_id_to_follow') .") is already present in table");
         } catch (ModelNotFoundException $e) {
             // Only save to database when combination is not yet present in database
             $newFollowing->save();

@@ -13,6 +13,6 @@ class Likes extends Model
 
 	protected $fillable = [
 		'user_id',
-		'liked_wave_id',
+		'wave_id',
 	];
 }

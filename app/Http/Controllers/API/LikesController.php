@@ -14,7 +14,7 @@ class LikesController extends Controller
     // Retrieve list of all users that like the corresponding wave
     public function index($wave_id)
     {
-        $likes = Likes::where('liked_wave_id', $wave_id);
+        $likes = Likes::where('wave_id', $wave_id);
         return Response::json($likes, 200);
     }
 
