@@ -56,9 +56,9 @@ class SinusController extends Controller
 			}
 
 			$sinus->followers = 0;
-			$followers = Following::where('following_user_id', $sinus->user_id);
+			$followers = Following::where('following_user_id', $sinus->user_id)->get();
 			if ($followers) {
-				$sinus->followers = sizeof($followers);
+				$sinus->followers = $followers->count();
 			}
 
 			// Determine whether user likes this wave
@@ -103,9 +103,9 @@ class SinusController extends Controller
 			$sinus->following = true;
 
 			$sinus->followers = 0;
-			$followers = Following::where('following_user_id', $sinus->user_id);
+			$followers = Following::where('following_user_id', $sinus->user_id)->get();
 			if ($followers) {
-				$sinus->followers = sizeof($followers);
+				$sinus->followers = $followers->count();
 			}
 		}
 
@@ -157,9 +157,9 @@ class SinusController extends Controller
         }
 
 		$sinus->followers = 0;
-		$followers = Following::where('following_user_id', $sinus->user_id);
-		if ($followers) {
-			$sinus->followers = $followers;
+		$followers = Following::where('following_user_id', $sinus->user_id)->get();
+			if ($followers) {
+				$sinus->followers = $followers->count();
 		}
 
         $sinus->following = $following;
