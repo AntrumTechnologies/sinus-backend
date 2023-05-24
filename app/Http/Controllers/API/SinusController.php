@@ -55,7 +55,14 @@ class SinusController extends Controller
 				}
 			}
 
+			$sinus->followers = 0;
+			$followers = Following::where('following_user_id', $sinus->user_id);
+			if ($followers) {
+				$sinus->followers = sizeof($followers);
+			}
+
 			// Determine whether user likes this wave
+			/* TODO(PATBRO): roll out at a later moment in time
 			if (Auth::guest()) {
 				$sinus->liked = false;
 			} else {
@@ -65,6 +72,7 @@ class SinusController extends Controller
 					$sinus->liked = false;
 				}
 			}
+			*/
 		}
 
 		return Response::json($retrieveSine, 200);
@@ -93,6 +101,12 @@ class SinusController extends Controller
 
 			// Set following to true for all waves
 			$sinus->following = true;
+
+			$sinus->followers = 0;
+			$followers = Following::where('following_user_id', $sinus->user_id);
+			if ($followers) {
+				$sinus->followers = sizeof($followers);
+			}
 		}
 
 		return Response::json($retrieveSine, 200);
@@ -141,6 +155,12 @@ class SinusController extends Controller
         } else {
             $following = false;
         }
+
+		$sinus->followers = 0;
+		$followers = Following::where('following_user_id', $sinus->user_id);
+		if ($followers) {
+			$sinus->followers = $followers;
+		}
 
         $sinus->following = $following;
         return Response::json($sinus, 200);
