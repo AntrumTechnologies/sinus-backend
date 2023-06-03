@@ -42,7 +42,7 @@ class NewWaveValue extends Notification
     {
         return FcmMessage::create()
             ->setNotification(\NotificationChannels\Fcm\Resources\Notification::create()
-                ->setTitle('New wave value')
+                ->setTitle('Wave updated')
                 ->setBody('A new value has been added to one of the waves of '. $this->userName))
             ->setAndroid(
                 AndroidConfig::create()

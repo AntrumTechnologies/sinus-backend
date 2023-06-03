@@ -35,13 +35,6 @@ class NewWave extends Notification
         return [FcmChannel::class];
     }
 
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                ->line('One of your invoices has been paid!')
-                ->line('Thank you for using our application!');
-    }
-
     public function toFcm($notifiable)
     {
         return FcmMessage::create()
