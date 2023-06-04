@@ -115,19 +115,12 @@ class SinusController extends Controller
 	public function store(Request $request)
     {
 		$validator = Validator::make($request->all(), [
-			'wave_name' => 'required|max:30',
+			'wave_name' => 'required|max:30|unique:sinuses,date_name,NULL,NULL,user_id,'. Auth::id() .',deleted_at,NULL',
 			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 		]);
 
 		if ($validator->fails()) {
 			return Response::json($validator->errors()->first(), 400);	
-		}
-
-		$createdSinuses = Sinus::where('user_id', Auth::id())->get();
-		foreach ($createdSinuses as $sinus) {
-			if ($sinus->name == $request->get('wave_name')) {
-				return Response::json("Another wave with the same name already exists", 400);
-			}
 		}
 
 		$avatar = null;
@@ -168,12 +161,16 @@ class SinusController extends Controller
 
 	public function update(Request $request)
 	{
-		$request->validate([
-			'id' => 'required|integer',
+		$validator = Validator::make($request->all(), [
+			'id' => 'required|integer|exists:sinuses,id,deleted_at,NULL',
 			'date_name' => 'sometimes|max:30',
 			'archived' => 'sometimes|boolean',
 			'avatar' => 'sometimes|mimes:jpeg,png|max:4096',
 		]);
+		
+		if ($validator->fails()) {
+			return Response::json($validator->errors()->first(), 400);	
+		}
 
 		$sinus = Sinus::where('id', $request->get('id'));
 		if ($request->has('date_name')) {
@@ -198,9 +195,13 @@ class SinusController extends Controller
 
 	public function delete(Request $request)
 	{
-		$request->validate([
-			'id' => 'required|integer',
+		$validator = Validator::make($request->all(), [
+			'id' => 'required|integer|exists:sinuses,id,deleted_at,NULL',
 		]);
+
+		if ($validator->fails()) {
+			return Response::json($validator->errors()->first(), 400);	
+		}
 
 		// Fetch wave by ID and also created by this user
 		$sinus = Sinus::findOrFail($request->get('id'));
